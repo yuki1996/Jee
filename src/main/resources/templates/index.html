@@ -11,9 +11,8 @@
       <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
    </head>
    <body>
-      <h1>Bonjour</h1>
-      <h2 th:utext="${message}">..!..</h2>
-       
+      <h1 th:inline="text">Bonjour [[${#httpServletRequest.remoteUser}]]!</h1>
+             
       <!--  
        
          In Thymeleaf the equivalent of
@@ -23,6 +22,9 @@
          -->
           
       <a th:href="@{/personList}">Liste utilisateurs</a>  
+       <form th:action="@{/logout}" method="post">
+           <input type="submit" value="Déconnexion"/>
+       </form>
        
    </body>
 </html>

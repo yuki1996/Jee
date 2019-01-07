@@ -11,7 +11,7 @@
       <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
    </head>
    <body>
-      <h1>Crée un utilisateur:</h1>
+      <h1>Créer un utilisateur:</h1>
        
       <!--  
          In Thymeleaf the equivalent of
@@ -22,12 +22,12 @@
       <form th:action="@{/addPerson}"
          th:object="${personForm}" method="POST">
          Email:
-         <input type="email" th:field="*{mail}" />    
+         <input type="text" th:field="*{mail}" />    
          <br/>
          Mot de passe:
          <input type="password" th:field="*{password}" />     
          <br/>
-         <input type="submit" value="Create" />
+         <input type="submit" value="Créer" />
       </form>
        
       <br/>
