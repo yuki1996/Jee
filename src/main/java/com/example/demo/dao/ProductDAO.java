@@ -17,4 +17,6 @@ public interface ProductDAO {
 
     public void save(ProductInfo productInfo);
     
+	public void delete(ProductInfo productInfo);
+    
 }

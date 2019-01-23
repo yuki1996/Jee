@@ -19,7 +19,9 @@
  
    <div class="page-title">Product List</div>
  
- 
+ <a style="color:green;"
+              href="${pageContext.request.contextPath}/product">
+                add Product</a>
  
    <c:forEach items="${paginationProducts.list}" var="prodInfo">
        <div class="product-preview-container">
@@ -28,9 +30,12 @@
                    src="${pageContext.request.contextPath}/productImage?code=${prodInfo.code}" /></li>
                <li>Code: ${prodInfo.code}</li>
                <li>Name: ${prodInfo.name}</li>
-                <li><a style="color:red;"
+                <li><a style="color:orange;"
               href="${pageContext.request.contextPath}/product?code=${prodInfo.code}">
                 Edit Product</a></li>
+                <li><a style="color:red;"
+              href="${pageContext.request.contextPath}/removeProduct?code=${prodInfo.code}">
+                delete Product</a></li>
            </ul>
        </div>
  

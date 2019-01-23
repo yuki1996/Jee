@@ -44,7 +44,7 @@ public class MainController {
  
     @RequestMapping("/403")
     public String accessDenied() {
-        return "/403";
+        return "403";
     }
  
     @RequestMapping("/")

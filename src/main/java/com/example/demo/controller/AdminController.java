@@ -52,11 +52,12 @@ public class AdminController {
         if (code != null && code.length() > 0) {
             productInfo = productDAO.findProductInfo(code);
         }
-        /*
+        
         if (productInfo == null) {
             productInfo = new ProductInfo();
             productInfo.setNewProduct(true);
-        }*/
+        }
+        
         model.addAttribute("productForm", productInfo);
         return "product";
     }
@@ -81,6 +82,31 @@ public class AdminController {
             model.addAttribute("message", message);
             // Show product form.
             return "product";
+ 
+        }
+        return "redirect:/productList";
+    }
+    
+ // GET: delete product
+    @RequestMapping(value = { "/removeProduct" }, method = RequestMethod.GET)
+    // Avoid UnexpectedRollbackException (See more explanations)
+    @Transactional(propagation = Propagation.NEVER)
+    public String productRemove(Model model, //
+            @ModelAttribute("productForm") ProductInfo productInfo, //
+            BindingResult result, //
+            final RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "403";
+        }
+        try {
+            productDAO.delete(productInfo);
+        } catch (Exception e) {
+            // Need: Propagation.NEVER?
+            String message = e.getMessage();
+            model.addAttribute("message", message);
+            // Show product form.
+            return "redirect:/productList";
  
         }
         return "redirect:/productList";

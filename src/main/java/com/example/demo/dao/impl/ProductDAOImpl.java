@@ -91,5 +91,14 @@ public class ProductDAOImpl implements ProductDAO {
     public PaginationResult<ProductInfo> queryProducts(int page, int maxResult, int maxNavigationPage) {
         return queryProducts(page, maxResult, maxNavigationPage, null);
     }
+
+	@Override
+	public void delete(ProductInfo productInfo) {
+		Product product = this.findProduct(productInfo.getCode());
+        if (product == null) {
+            return;
+        }
+		this.sessionFactory.getCurrentSession().remove(product);
+	}
 	
 }
