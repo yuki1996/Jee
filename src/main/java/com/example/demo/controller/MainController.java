@@ -1,96 +1,102 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
+import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+ 
+import com.example.demo.dao.ProductDAO;
+import com.example.demo.dao.UserDAO;
+import com.example.demo.entity.Product;
+import com.example.demo.model.PaginationResult;
+import com.example.demo.model.ProductInfo;
+import com.example.demo.model.UserInfo;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.example.demo.form.PersonForm;
-import com.example.demo.model.Person;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  
 @Controller
+// Enable Hibernate Transaction.
+@Transactional
+// Need to use RedirectAttributes
+@EnableWebMvc
 public class MainController {
  
-    private static List<Person> persons = new ArrayList<Person>();
- 
-    public static final String EMAIL_VALID = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$";
-    public static final String PASSWORD_VALID = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
+    @Autowired
+    private ProductDAO productDAO;
     
-    static {
-        persons.add(new Person("Bill@truc.com", "Gates"));
-        persons.add(new Person("Steve@truc.com", "mdp"));
+
+    @Autowired
+    private UserDAO userDAO;
+ 
+    @RequestMapping("/403")
+    public String accessDenied() {
+        return "/403";
     }
  
-    // Injectez (inject) via application.properties.
-    @Value("${welcome.message}")
-    private String message;
- 
-    @Value("${error.message}")
-    private String errorMessage;
- 
-    @RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
-    public String index(Model model) {
- 
-        model.addAttribute("message", message);
- 
+    @RequestMapping("/")
+    public String home() {
         return "index";
     }
  
-    @RequestMapping(value = { "/personList" }, method = RequestMethod.GET)
-    public String personList(Model model) {
+    // Product List page.
+    @RequestMapping({ "/productList" })
+    public String listProductHandler(Model model, //
+            @RequestParam(value = "name", defaultValue = "") String likeName,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        final int maxResult = 5;
+        final int maxNavigationPage = 10;
  
-        model.addAttribute("persons", persons);
+        PaginationResult<ProductInfo> result = productDAO.queryProducts(page, //
+                maxResult, maxNavigationPage, likeName);
  
-        return "personList";
+        model.addAttribute("paginationProducts", result);
+        return "productList";
     }
  
-    @RequestMapping(value = { "/addPerson" }, method = RequestMethod.GET)
-    public String showAddPersonPage(Model model) {
+    
+ // User List page.
+    @RequestMapping({ "/userList" })
+    public String listUserHandler(Model model, //
+            @RequestParam(value = "name", defaultValue = "") String likeName,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        final int maxResult = 5;
+        final int maxNavigationPage = 10;
  
-        PersonForm personForm = new PersonForm();
-        model.addAttribute("personForm", personForm);
+        PaginationResult<UserInfo> result = userDAO.queryUsers(page, //
+                maxResult, maxNavigationPage, likeName);
  
-        return "addPerson";
+        model.addAttribute("paginationUsers", result);
+        return "userList";
     }
+    
+    
  
-    @RequestMapping(value = { "/addPerson" }, method = RequestMethod.POST)
-    public String savePerson(Model model, //
-            @ModelAttribute("personForm") PersonForm personForm) {
- 
-        String mail = personForm.getMail();
-        String password = personForm.getPassword();
-        
-        if (mail == null || mail.length() == 0 || password == null 
-        		|| password.length() == 0) {
-        	model.addAttribute("errorMessage", "l'email et le mot de passe sont obligatoires ");
-            return "addPerson";
+    @RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
+    public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
+            @RequestParam("code") String code) throws IOException {
+        Product product = null;
+        if (code != null) {
+            product = this.productDAO.findProduct(code);
         }
-        
-        System.out.println("validate mail"+Pattern.matches(EMAIL_VALID, mail));
-        System.out.println("validate password"+Pattern.matches(PASSWORD_VALID, password));
-        boolean validateMail = Pattern.matches(EMAIL_VALID, mail);
-        
-        if (!validateMail) {
-        	model.addAttribute("errorMessage", "le mail est invalide");
-            return "addPerson";
-        } 
-        
-        
-        if (!Pattern.matches(PASSWORD_VALID, password)) {
-        	model.addAttribute("errorMessage", "le mot de passe ne correspond pas au norme de sécurité");
-            return "addPerson";
-        } 
-        
-        Person newPerson = new Person(mail, password);
-        persons.add(newPerson);
-
-        return "redirect:/personList";
+        if (product != null && product.getImage() != null) {
+            response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+            response.getOutputStream().write(product.getImage());
+        }
+        response.getOutputStream().close();
     }
- 
+     
 }

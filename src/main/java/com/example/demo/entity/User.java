@@ -1,48 +1,75 @@
 package com.example.demo.entity;
 
-import java.util.Set;
-//import javax.persistence.*;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-//@Entity
-public class User {
-/*
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+import org.apache.commons.codec.digest.DigestUtils;
 
-    private String username;
+@Entity
+@Table(name = "Users")
+public class User implements Serializable {
 
+	private static final long serialVersionUID = -2054386655979281969L;
+	 
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_USER = "USER";
+ 
+    private String id;
+    private String email;
     private String password;
-
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-
-
-    public User(String username, String password, Set<Role> roles) {
-    	//Vérification
-    	this.username = username;
-    	this.password = password;
-    	this.roles = roles;
+    private boolean active;
+    private String userRole;
+ 
+    @Id
+    @Column(name = "id", length = 50, nullable = false)
+    public String getId() {
+        return id;
     }
-    
-    // GETTERS and SETTERS
-    public String getUsername() {
-    	return username;
+ 
+    public void setId(String id) {
+        this.id = id;
     }
-    
+    @Column(name = "email", length = 256, nullable = false)
+    public String getEmail() {
+        return email;
+    }
+ 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+ 
+    @Column(name = "Password", length = 256, nullable = false)
     public String getPassword() {
-    	return password;
+        return password;
     }
-    
-    public Set<Role> getRoles() {
-    	return roles;
+ 
+    public void setPassword(String password) {
+    	this.password = DigestUtils.sha256Hex(password);
+    }
+ 
+    @Column(name = "Active", length = 1, nullable = false)
+    public boolean isActive() {
+        return active;
+    }
+ 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+ 
+    @Column(name = "User_Role", length = 20, nullable = false)
+    public String getUserRole() {
+        return userRole;
+    }
+ 
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
     
     @Override
-    public String toString() {
-        return String.format(
-                "User[id=%d, mail='%s', password='%s']",
-                id, username, password);
-    }*/
+    public String toString()  {
+        return "["+ this.email+","+ this.password+","+ this.userRole+"]";
+    }
 }
