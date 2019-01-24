@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+//import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
@@ -10,7 +10,7 @@ public class ProductInfo {
     private String code;
     private String name;
     private boolean newProduct=false;
-    private CommonsMultipartFile fileData;// Upload file.
+    //private CommonsMultipartFile fileData;// Upload file.
  
     public ProductInfo() {}
     
@@ -39,14 +39,14 @@ public class ProductInfo {
     public void setName(String name) {
         this.name = name;
     }
- 
+ /*
     public CommonsMultipartFile getFileData() {
         return fileData;
     }
  
     public void setFileData(CommonsMultipartFile fileData) {
         this.fileData = fileData;
-    }
+    }*/
  
     public boolean isNewProduct() {
         return newProduct;

@@ -53,13 +53,13 @@ public class ProductDAOImpl implements ProductDAO {
         }
         product.setCode(code);
         product.setName(productInfo.getName());
- 
+        /*
         if (productInfo.getFileData() != null) {
             byte[] image = productInfo.getFileData().getBytes();
             if (image != null && image.length > 0) {
                 product.setImage(image);
             }
-        }
+        }*/
         if (isNew) {
             this.sessionFactory.getCurrentSession().persist(product);
         }

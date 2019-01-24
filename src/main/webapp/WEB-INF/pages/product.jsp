@@ -44,17 +44,7 @@
            </tr>
  
            
-           <tr>
-               <td>Image</td>
-               <td>
-               <img src="${pageContext.request.contextPath}/productImage?code=${productForm.code}" width="100"/></td>
-               <td> </td>
-           </tr>
-           <tr>
-               <td>Upload Image</td>
-               <td><form:input type="file" path="fileData"/></td>
-               <td> </td>
-           </tr>
+        
  
  
            <tr>

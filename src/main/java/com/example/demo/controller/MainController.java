@@ -84,7 +84,7 @@ public class MainController {
     }
     
     
- 
+    /*
     @RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
     public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
             @RequestParam("code") String code) throws IOException {
@@ -97,6 +97,6 @@ public class MainController {
             response.getOutputStream().write(product.getImage());
         }
         response.getOutputStream().close();
-    }
+    }*/
      
 }

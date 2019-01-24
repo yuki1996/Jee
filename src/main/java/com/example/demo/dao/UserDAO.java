@@ -13,5 +13,13 @@ public interface UserDAO {
 
     public PaginationResult<UserInfo> queryUsers(int page, int maxResult,
             int maxNavigationPage, String likeName);
+
+	public UserInfo findUserInfo(String id);
+
+	public void delete(UserInfo userInfo);
+
+	public void save(UserInfo userInfo);
+
+	User findUserById(String id);
 	   
 }

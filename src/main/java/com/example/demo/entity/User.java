@@ -1,12 +1,14 @@
 package com.example.demo.entity;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import com.google.common.hash.Hashing;
 
 @Entity
 @Table(name = "Users")
@@ -20,7 +22,6 @@ public class User implements Serializable {
     private String id;
     private String email;
     private String password;
-    private boolean active;
     private String userRole;
  
     @Id
@@ -47,16 +48,9 @@ public class User implements Serializable {
     }
  
     public void setPassword(String password) {
-    	this.password = DigestUtils.sha256Hex(password);
-    }
- 
-    @Column(name = "Active", length = 1, nullable = false)
-    public boolean isActive() {
-        return active;
-    }
- 
-    public void setActive(boolean active) {
-        this.active = active;
+    	this.password = Hashing.sha256()
+        .hashString(password, StandardCharsets.UTF_8)
+        .toString();
     }
  
     @Column(name = "User_Role", length = 20, nullable = false)

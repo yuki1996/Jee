@@ -31,6 +31,14 @@ public class UserDAOImpl implements UserDAO {
 	}
 	 
 	@Override
+	public User findUserById(String id) {
+		Session session = sessionFactory.getCurrentSession();
+	    Criteria crit = session.createCriteria(User.class);
+	    crit.add(Restrictions.eq("id", id));
+	    return (User) crit.uniqueResult();
+	}
+	
+	@Override
 	public PaginationResult<UserInfo> queryUsers(int page,
             int maxResult, int maxNavigationPage, String likeName) {
 		String sql = "Select new " + UserInfo.class.getName() //
@@ -54,5 +62,51 @@ public class UserDAOImpl implements UserDAO {
     public PaginationResult<UserInfo> queryUsers(int page, int maxResult,
             int maxNavigationPage) {
 		return queryUsers(page, maxResult, maxNavigationPage, null);
+	}
+
+	@Override
+	public UserInfo findUserInfo(String id) {
+	    User user = findUserById(id);
+	    
+	    if (user == null) {
+            return null;
+        }
+        return new UserInfo(user.getId(), user.getEmail(), user.getPassword(), user.getUserRole());
+	}
+
+	@Override
+	public void delete(UserInfo userInfo) {
+		User user = this.findUserById(userInfo.getId());
+        if (user == null) {
+            return;
+        }
+		this.sessionFactory.getCurrentSession().remove(user);
+	}
+
+	@Override
+	public void save(UserInfo userInfo) {
+		String id = userInfo.getId();
+		 
+        User user = null;
+ 
+        boolean isNew = false;
+        if (id != null) {
+        	user = this.findUserById(id);
+        }
+        if (user == null) {
+            isNew = true;
+            user = new User();
+        }
+        user.setId(userInfo.getId());
+        user.setEmail(userInfo.getEmail());
+        user.setPassword(userInfo.getPassword());
+        user.setUserRole(userInfo.getUserRole());
+        
+        if (isNew) {
+            this.sessionFactory.getCurrentSession().persist(user);
+        }
+        
+        // If error in DB, Exceptions will be thrown out immediately
+        this.sessionFactory.getCurrentSession().flush();
 	}
 }

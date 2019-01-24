@@ -4,8 +4,8 @@ public class UserInfo {
 
     private String email;
     private String password;
-    private boolean valid;
-    private String user_Role;
+    private String userRole;
+    private boolean newUser=false;
     private String id;
     
     public UserInfo() {
@@ -16,7 +16,7 @@ public class UserInfo {
     	this.id = id;
     	this.email = email;
     	this.password = password;
-    	this.user_Role = userRole;
+    	this.userRole = userRole;
     }
     
     public String getEmail() {
@@ -35,20 +35,12 @@ public class UserInfo {
         this.password = password;
     }
     
-    public boolean isValid() {
-        return valid;
-    }
- 
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-    
     public String getUserRole() {
-        return user_Role;
+        return userRole;
     }
  
     public void setUserRole(String userRole) {
-        this.user_Role = userRole;
+        this.userRole = userRole;
     }
 
     public String getId() {
@@ -58,4 +50,12 @@ public class UserInfo {
     public void setId(String id) {
         this.id = id;
     }
+
+    public boolean getNewUser() {
+		return newUser;
+	}
+    
+	public void setNewUser(boolean b) {
+		newUser = b;
+	}
 }

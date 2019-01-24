@@ -19,7 +19,9 @@
  
    <div class="page-title">User List</div>
  
- 
+ <a style="color:green;"
+              href="${pageContext.request.contextPath}/user">
+                add user</a>
  
    <c:forEach items="${paginationUsers.list}" var="userInfo">
        <div class="product-preview-container">
@@ -28,9 +30,12 @@
                <li>email: ${userInfo.email}</li>
                <li>password: ${userInfo.password}</li>
                <li>role: ${userInfo.userRole}</li>
-                <li><a style="color:red;"
+                <li><a style="color:orange;"
               href="${pageContext.request.contextPath}/user?id=${userInfo.id}">
                 edit user</a></li>
+                <li><a style="color:red;"
+              href="${pageContext.request.contextPath}/removeUser?id=${userInfo.id}">
+                delete user</a></li>
            </ul>
        </div>
  

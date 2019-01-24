@@ -26,8 +26,6 @@
    <c:forEach items="${paginationProducts.list}" var="prodInfo">
        <div class="product-preview-container">
            <ul>
-               <li><img class="product-image"
-                   src="${pageContext.request.contextPath}/productImage?code=${prodInfo.code}" /></li>
                <li>Code: ${prodInfo.code}</li>
                <li>Name: ${prodInfo.name}</li>
                 <li><a style="color:orange;"

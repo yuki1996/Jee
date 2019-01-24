@@ -40,7 +40,7 @@ public class MyDBAuthenticationService implements UserDetailsService {
  
         grantList.add(authority);
  
-        boolean enabled = user.isActive();
+        boolean enabled = true;
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;

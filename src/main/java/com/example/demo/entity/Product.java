@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 @Entity
 @Table(name = "Products")
 public class Product implements Serializable {
@@ -18,7 +16,7 @@ public class Product implements Serializable {
     
     private String code;
     private String name;
-    private byte[] image;
+    //private byte[] image;
  
     @Id
     @Column(name = "Code", length = 20, nullable = false)
@@ -38,7 +36,7 @@ public class Product implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
- 
+    /*
     @Lob
     @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
     public byte[] getImage() {
@@ -47,6 +45,6 @@ public class Product implements Serializable {
  
     public void setImage(byte[] image) {
         this.image = image;
-    }
+    }*/
  
 }
