@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import java.util.UUID;
 
+import com.example.demo.dao.InventoryDAO;
 import com.example.demo.dao.ProductDAO;
 import com.example.demo.dao.UserDAO;
 import com.example.demo.entity.User;
+import com.example.demo.model.InventoryInfo;
 import com.example.demo.model.ProductInfo;
 import com.example.demo.model.UserInfo;
 
@@ -33,6 +35,9 @@ public class AdminController {
 
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private InventoryDAO inventoryDAO;
     
     // GET: Show Login Page
     @RequestMapping(value = { "/login" }, method = RequestMethod.GET)
@@ -180,6 +185,62 @@ public class AdminController {
         }
         return "redirect:/userList";
     }
+    
+    
+ // GET: delete inventory
+    @RequestMapping(value = { "/removeInventory" }, method = RequestMethod.GET)
+    // Avoid UnexpectedRollbackException (See more explanations)
+    @Transactional(propagation = Propagation.NEVER)
+    public String userRemove(Model model, //
+            @ModelAttribute("inventoryForm") InventoryInfo inventoryInfo, //
+            BindingResult result, //
+            final RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "403";
+        }
+        try {
+        	inventoryDAO.delete(inventoryInfo);
+        } catch (Exception e) {
+            // Need: Propagation.NEVER?
+            String message = e.getMessage();
+            model.addAttribute("message", message);
+            // Show user form.
+            return "redirect:/inventoryList";
+ 
+        }
+        return "redirect:/inventoryList";
+    }
+    
+    // GET: open inventory
+    @RequestMapping(value = { "/openInventory" }, method = RequestMethod.GET)
+    // Avoid UnexpectedRollbackException (See more explanations)
+    @Transactional(propagation = Propagation.NEVER)
+    public String openInventory(Model model, //
+    		@RequestParam(value = "id", defaultValue = "") String id) {
+
+        if (id != null && id.length() > 0) {
+        	inventoryDAO.open(id);
+        }
+        
+        return "redirect:/inventoryList";
+    }
+    
+ // GET: close inventory
+    @RequestMapping(value = { "/closeInventory" }, method = RequestMethod.GET)
+    // Avoid UnexpectedRollbackException (See more explanations)
+    @Transactional(propagation = Propagation.NEVER)
+    public String closeInventory(Model model, //
+    		@RequestParam(value = "id", defaultValue = "") String id) {
+
+        if (id != null && id.length() > 0) {
+        	inventoryDAO.close(id);
+        }
+        
+        return "redirect:/inventoryList";
+    }
+    
+    
  
     
 }

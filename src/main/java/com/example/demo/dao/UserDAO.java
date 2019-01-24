@@ -20,6 +20,6 @@ public interface UserDAO {
 
 	public void save(UserInfo userInfo);
 
-	User findUserById(String id);
+	public User findUserById(String id);
 	   
 }

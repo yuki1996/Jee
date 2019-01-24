@@ -4,10 +4,14 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
+
+import com.example.demo.dao.InventoryAndProductDAO;
+import com.example.demo.dao.InventoryDAO;
 import com.example.demo.dao.ProductDAO;
 import com.example.demo.dao.UserDAO;
 import com.example.demo.entity.Product;
+import com.example.demo.model.InventoryAndProductInfo;
+import com.example.demo.model.InventoryInfo;
 import com.example.demo.model.PaginationResult;
 import com.example.demo.model.ProductInfo;
 import com.example.demo.model.UserInfo;
@@ -38,9 +42,14 @@ public class MainController {
     @Autowired
     private ProductDAO productDAO;
     
-
+    @Autowired
+    private InventoryDAO inventoryDAO;
+    
     @Autowired
     private UserDAO userDAO;
+    
+    @Autowired
+    private InventoryAndProductDAO inventoryAndProductDAO;
  
     @RequestMapping("/403")
     public String accessDenied() {
@@ -81,6 +90,36 @@ public class MainController {
  
         model.addAttribute("paginationUsers", result);
         return "userList";
+    }
+    
+ // Inventory List page.
+    @RequestMapping({ "/inventoryList" })
+    public String listInventoryHandler(Model model, //
+            @RequestParam(value = "name", defaultValue = "") String likeName,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        final int maxResult = 5;
+        final int maxNavigationPage = 10;
+ 
+        PaginationResult<InventoryInfo> result = inventoryDAO.queryInventories(page, //
+                maxResult, maxNavigationPage, likeName);
+ 
+        model.addAttribute("paginationInventories", result);
+        return "inventoryList";
+    }
+    
+    // Inventory List page.
+    @RequestMapping({ "/inventory" })
+    public String listInventoryAndProductsHandler(Model model, //
+            @RequestParam(value = "id", defaultValue = "") String id,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        final int maxResult = 5;
+        final int maxNavigationPage = 10;
+ 
+        PaginationResult<InventoryAndProductInfo> result = inventoryAndProductDAO.queryInventoryAndProducts(page, //
+                maxResult, maxNavigationPage, id);
+ 
+        model.addAttribute("paginationInventoryAndProducts", result);
+        return "inventoryAndProductsList";
     }
     
     

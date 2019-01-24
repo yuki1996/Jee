@@ -37,7 +37,7 @@ public class Inventory implements Serializable {
     }
  
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CodeID", nullable = false, //
+    @JoinColumn(name = "creatorID", nullable = false, //
     foreignKey = @ForeignKey(name = "FK_creatorID") )
     public User getUser() {
         return user;
@@ -57,11 +57,11 @@ public class Inventory implements Serializable {
     }
     
     @Column(name = "etat", length = 1, nullable = false)
-    public boolean isActive() {
+    public boolean getEtat() {
         return etat;
     }
  
-    public void setActive(boolean etat) {
+    public void setEtat(boolean etat) {
         this.etat = etat;
     }
 }
